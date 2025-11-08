@@ -24,41 +24,7 @@ deduplex <- function(obj){
   cat('Cells Before deduplex: ', ncol(obj), '\n')
   return(obj)
 } # DoubletFinder
-get_chromosome_means <- function(counts, path_to_mapped_genes='path_to/mapped_genes.txt'){
-  row_sums <- rowSums(counts)
-  counts <- counts[row_sums > 0, ]
-  norm_counts <- t(t(counts) / colSums(counts) * 1000)  
-  log_counts <- log2(norm_counts + 1) 
-  gene_filter <- rowSums(log_counts) >= 100
-  log_counts_filtered <- log_counts[gene_filter, ]
-  # Remove HLA-genes
-  hla_genes <- grep("HLA", rownames(log_counts_filtered), value = TRUE)
-  log_counts_filtered <- log_counts_filtered[!(rownames(log_counts_filtered) %in% hla_genes), ]
-  gene_chromosome_map <- read.table(path_to_mapped_genes, sep = '\t', header = T)  # Файл с генами и их хромосомами
-  chromosome_means <- sapply(unique(gene_chromosome_map$Chromosome.scaffold.name), function(chrom) {
-    genes <- intersect(
-      gene_chromosome_map$HGNC.symbol[gene_chromosome_map$Chromosome.scaffold.name == chrom],
-      rownames(log_counts_filtered)  
-    )
-    
-    if (length(genes) > 0) {
-      colMeans(log_counts_filtered[genes, , drop = FALSE], na.rm = TRUE)
-    } else {
-      rep(NA, ncol(log_counts_filtered))  # Если генов нет, возвращаем NA
-    }
-  })
-  chromosome_means <- as.data.frame(chromosome_means)
-  colnames(chromosome_means) <- paste0("Chr", rep(1:22))
-  rownames(chromosome_means) <- rownames(t(log_counts_filtered))
-  return(chromosome_means)
-}
-feature_plot <- function(data, feature){
-  FeaturePlot(data, feature, order=T, slot = 'data')  +
-    scale_color_gradientn(
-      colours = c("gray", "blue1", "deeppink1"),  
-      values = c(0, 0.3, .65,  1),  
-    )
-}
+
 count_plots <- function(obj, 
                         feature_lower=600,
                         feature_upper=6000,
@@ -262,7 +228,7 @@ DimPlot(gcf, label=T)
 feature_plot(gcf, 'BEX1')
 
 #--------------------------CAFS----------------------------------------------------------------
-cafs <- WhichCells(gcf, idents = 'Endothelial cells')
+cafs <- WhichCells(gcf, idents = 'Endothelial cells') # separeta endothelial cells and CAFs
 cafs <- subset(gcf, cells = cafs)
 
 cafs <- RunPCA(cafs, features = VariableFeatures(object = cafs))
@@ -425,35 +391,6 @@ dp + scale_color_gradientn(
 )
 dev.off()
 
-#--------------------------CNV----------------------------------------------------------------
- 
-counts <- GetAssayData(gcf, assay = "RNA", layer = "counts")
-chromosome_means <- get_chromosome_means(counts)
-
-write.csv(
-  data.frame(chromosome_means),
-  file = "chromosome_means_validation_v3.csv",
-  row.names = TRUE,            # не пишем номер строки
-  quote = FALSE                 # без кавычек, если не нужны
-)
-
-
-
-####### ML RES:
-res <- read_csv('result_ML_val3.csv')
-tail(res)
-res_df <- as.data.frame(res)
-head(res_df)
-
-ann <- ifelse(res_df$pred == 1, "Glioblastoma cells", "Stromal cells")
-names(ann) <- res_df$label
-gcf$ML_annotation <- ann[Cells(gcf)]
-
-svg('vln.svg', width = 8, height = 7)
-DimPlot(gcf, group.by = 'ML_annotation', cols = c('#FF4500', 'deepskyblue'))
-dev.off()
-
-DimPlot(gcf, group.by = 'init_annot', cols = cols)
 
 #-------CELL_CHAT--------------------------------------------------------------
 library(CellChat)

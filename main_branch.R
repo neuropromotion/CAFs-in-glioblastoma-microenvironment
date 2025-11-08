@@ -231,11 +231,6 @@ svg('vln.svg', width = 8, height = 7)
 p
 dev.off()  
 
-
-
-
-
-
 # GET TOP 5 DEG for each cluster
 top.genes <- character() # top DEG genes for each cluster (unique)
 for (cl in new.order) {
@@ -316,19 +311,3 @@ VlnPlot(merged_filtered, features = feat,
 VlnPlot(merged_filtered_old, features = feat,
         cols  = colors_final, group.by = 'final_annot',
         log = T, pt.size = 0)
-
-
-
-#----------------------ML ANNOTATION------------------------------
-res <- read_csv('path_to_dir/result_ML_main_v2.csv')
-tail(res)
-res_df <- as.data.frame(res)
-head(res_df)
-
-ann <- ifelse(res_df$pred == 1, "Glioblastoma cells", "Stromal cells")
-names(ann) <- res_df$label
-merged_filtered$ML_annotation <- ann[Cells(merged_filtered)]
-
-svg('vln.svg', width = 8, height = 7)
-DimPlot(merged_filtered, group.by = 'ML_annotation', cols = c('#FF3E96', '#1E90FF'))
-dev.off()

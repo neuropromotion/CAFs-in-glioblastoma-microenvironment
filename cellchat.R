@@ -25,10 +25,10 @@ cellchat_workflow <- function(gcf){
   cellchat <- addMeta(cellchat, meta = meta, meta.name = "labels")
   cellchat <- setIdent(cellchat, ident.use = "labels") # set "labels" as default cell identity
   levels(cellchat@idents) # show factor levels of the cell labels
-  interaction_input <- read.csv(file = 'path_to_dir/interaction_input_CellChatDB.csv')
-  complex_input <- read.csv(file = 'path_to_dir/complex_input_CellChatDB.csv', row.names = 1)
-  cofactor_input <- read.csv(file = 'path_to_dir/cofactor_input_CellChatDB.csv', row.names = 1)
-  geneInfo <- read.csv(file = 'path_to_dir/geneInfo_CellChatDB.csv', row.names = 1)
+  interaction_input <- read.csv(file = 'cellchat_configue/interaction_input_CellChatDB.csv')
+  complex_input <- read.csv(file = 'cellchat_configue/complex_input_CellChatDB.csv', row.names = 1)
+  cofactor_input <- read.csv(file = 'cellchat_configue/cofactor_input_CellChatDB.csv', row.names = 1)
+  geneInfo <- read.csv(file = 'cellchat_configue/geneInfo_CellChatDB.csv', row.names = 1)
   #View(interaction_input)
   rownames(interaction_input) <- make.unique(as.character(interaction_input$Unnamed..0))
   interaction_input$Unnamed..0 <- NULL

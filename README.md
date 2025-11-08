@@ -11,6 +11,7 @@ Code for end‑to‑end scRNA‑seq analysis of cancer‑associated fibroblasts 
 | `Validation_1.R` | Processing of validation dataset №1 |
 | `Validation_2.R` | Processing of validation dataset №2 |
 | `GSVA.R` | GSVA-based annotation of glioblastoma cells (subtypes revealing). Requires `GBM_subtypes_DEG.xlsx` |
+| `GBM_subtypes_DEG.xlsx` | Differentially expressed genes of glioblastoma subtypes (PMIDs: 31327527, 40191211) |
 | `cellchat.R` | CellChat pipeline. Requires files stored in `cellchat_configue` |
 | `DEG.R` | Differentially expressed genes evaluation |
 | `save_plots.R` | Figures precessing |

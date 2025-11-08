@@ -35,7 +35,7 @@ The workflow highlights the **multifaceted role of stromal cells** in GBM, inclu
 - Performed using **DoubletFinder**
 
 ### 3. **Batch Integration**
-- **Harmony** used for removing batch effects across datasets
+- **Harmony** used for removing batch effects (main dataset)
 
 ### 4. **Core scRNA-seq Workflow**
 - Normalization  
@@ -46,7 +46,7 @@ The workflow highlights the **multifaceted role of stromal cells** in GBM, inclu
 
 ### 5. **Tumor Cell Subtype Annotation**
 - **GSVA** used to classify GBM tumor cells into six transcriptional states:  
-  - **GSC-like**  
+  - **Glioblastoma Stem Cells**  
   - **MES1-like**, **MES2-like**  
   - **NPC1-like**, **NPC2-like**  
   - **AC-like**  
@@ -56,26 +56,14 @@ The workflow highlights the **multifaceted role of stromal cells** in GBM, inclu
 - Conducted using **CellChat**, focusing on:
   - CAF–tumor signaling
   - CAF–endothelium interactions
-  - TME immunomodulatory networks
-
----
-
-## Requirements
-
-- R ≥ 4.2
-- Key dependencies:  
-  `Seurat`, `Harmony`, `DoubletFinder`, `GSVA`, `CellChat`, `SoupX`, `celldex`, `data.table`, `tidyverse`
-
-(See inline `library()` calls in each script.)
-
----
-
-## Citation / Related Publications
-If you use this workflow, please cite the corresponding studies (listed in the repo or manuscript, if available).
+  - CAF-immune interactions 
+  - stromal-tumor interactions
+  - stromal-immune interactions
 
 ---
 
 ## Contact
-If you have questions, suggestions, or collaboration inquiries — feel free to open an Issue or contact the maintainer directly.
+Work email: amismailov@hse.ru
+Personal email: neuro.promotion@gmail.com 
 
 ---

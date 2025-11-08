@@ -1,19 +1,81 @@
-# CAFs-in-glioblastoma-microenvironment
-Code for end‑to‑end scRNA‑seq analysis of cancer‑associated fibroblasts (CAFs) and other stromal compartments in the glioblastoma microenvironment. Analysis reveals the multifaceted impact of stromal cells on GBM biology, including support of glioblastoam stem cells proliferation, pro‑angiogenic signaling, and regional immunosuppression
+# CAFs in the Glioblastoma Microenvironment
+
+This repository contains code for an end-to-end **single-cell RNA-seq analysis** of **cancer-associated fibroblasts (CAFs)** and other stromal cell populations within the **glioblastoma (GBM) tumor microenvironment**.  
+The workflow highlights the **multifaceted role of stromal cells** in GBM, including:
+
+- Support of **glioblastoma stem cell (GSC)** proliferation  
+- **Pro-angiogenic** remodeling and vascular niche maintenance  
+- **Regional immunosuppression** and immune evasion  
+- Crosstalk between CAFs, tumor cells, endothelial cells, and infiltrating immune cells
 
 ---
 
-## Files
+## Repository Structure
 
 | File | Description |
 |------|-------------|
-| `main_branch.R` | Processing of main dataset |
-| `Validation_1.R` | Processing of validation dataset №1 |
-| `Validation_2.R` | Processing of validation dataset №2 |
-| `GSVA.R` | GSVA-based annotation of glioblastoma cells (subtypes revealing). Requires `GBM_subtypes_DEG.xlsx` |
-| `GBM_subtypes_DEG.xlsx` | Differentially expressed genes of glioblastoma subtypes (PMIDs: 31327527, 40191211) |
-| `cellchat.R` | CellChat pipeline. Requires files stored in `cellchat_configue` |
-| `DEG.R` | Differentially expressed genes evaluation |
-| `save_plots.R` | Figures precessing |
+| `main_branch.R` | Processing workflow for the main dataset |
+| `Validation_1.R` | Processing workflow for validation dataset #1 |
+| `Validation_2.R` | Processing workflow for validation dataset #2 |
+| `GSVA.R` | **GSVA-based subtype annotation** of glioblastoma tumor cells. Requires `GBM_subtypes_DEG.xlsx` |
+| `GBM_subtypes_DEG.xlsx` | DEG signatures for glioblastoma transcriptional subtypes (PMIDs: 31327527, 40191211) |
+| `cellchat.R` | **CellChat** pipeline for ligand–receptor interaction inference. Uses configuration in `cellchat_configue/` |
+| `DEG.R` | Differential expression analysis (cluster-wise or group-wise) |
+| `save_plots.R` | Script for figure post-processing and export |
+
+---
+
+## Analysis Pipeline Overview
+
+### 1. **Ambient RNA Correction**
+- **DecontX** — applied to the main dataset and validation dataset #1  
+- **SoupX** — applied to validation dataset #2  
+
+### 2. **Doublet Detection**
+- Performed using **DoubletFinder**
+
+### 3. **Batch Integration**
+- **Harmony** used for removing batch effects across datasets
+
+### 4. **Core scRNA-seq Workflow**
+- Normalization  
+- Scaling  
+- PCA  
+- UMAP projection  
+- Clustering using the **Louvain algorithm**
+
+### 5. **Tumor Cell Subtype Annotation**
+- **GSVA** used to classify GBM tumor cells into six transcriptional states:  
+  - **GSC-like**  
+  - **MES1-like**, **MES2-like**  
+  - **NPC1-like**, **NPC2-like**  
+  - **AC-like**  
+  - **OPC-like**
+
+### 6. **Cell–Cell Communication Analysis**
+- Conducted using **CellChat**, focusing on:
+  - CAF–tumor signaling
+  - CAF–endothelium interactions
+  - TME immunomodulatory networks
+
+---
+
+## Requirements
+
+- R ≥ 4.2
+- Key dependencies:  
+  `Seurat`, `Harmony`, `DoubletFinder`, `GSVA`, `CellChat`, `SoupX`, `celldex`, `data.table`, `tidyverse`
+
+(See inline `library()` calls in each script.)
+
+---
+
+## Citation / Related Publications
+If you use this workflow, please cite the corresponding studies (listed in the repo or manuscript, if available).
+
+---
+
+## Contact
+If you have questions, suggestions, or collaboration inquiries — feel free to open an Issue or contact the maintainer directly.
 
 ---

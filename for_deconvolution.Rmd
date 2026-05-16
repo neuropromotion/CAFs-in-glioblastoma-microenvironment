@@ -1,0 +1,119 @@
+```{r} 
+main <- readRDS(file = "/mnt/jack-5/amismailov/CAF_study/GCF/decontex.rds")
+validation <- readRDS(file = "/mnt/jack-5/amismailov/CAF_study/new_VAL1/combined_ss2_w2_10x_VAL1.rds") 
+```
+
+
+```{r} 
+Idents(main) <- 'final_annotation'
+Idents(validation) <- 'final_annotation_caf'
+
+main$cell_type <- as.character(Idents(main))
+validation$cell_type <- as.character(Idents(validation))
+```
+
+
+```{r}
+table(main$orig.ident)
+table(validation$orig.ident)
+```
+
+```{r}
+obj <- merge(main, y = validation, project = "sc_ref")
+obj <- JoinLayers(obj)
+stopifnot("cell_type" %in% colnames(obj@meta.data))
+stopifnot("orig.ident" %in% colnames(obj@meta.data))
+```
+
+
+
+```{r}
+# ---- 2) выбрать матрицу экспрессии для референса ----
+expr <- GetAssayData(obj, assay = "RNA", layer = "data")   # log-normalized RNA
+
+# genes x cells sparse matrix
+meta <- obj@meta.data[, c("cell_type", "orig.ident"), drop = FALSE]
+meta$cell_barcode <- colnames(obj)
+# оставляем клетки с валидной метой
+keep <- !is.na(meta$cell_type) & meta$cell_type != "" &
+        !is.na(meta$orig.ident) & meta$orig.ident != ""
+meta <- meta[keep, , drop = FALSE]
+expr <- expr[, meta$cell_barcode]
+
+```
+
+
+```{r}
+# ---- 3) фильтры на редкие cell type ----
+ct_counts <- table(meta$cell_type)
+good_ct <- names(ct_counts[ct_counts >= 50])  # порог можно менять
+meta <- meta[meta$cell_type %in% good_ct, , drop = FALSE]
+expr <- expr[, meta$cell_barcode]
+```
+
+```{r}
+# ---- 4) genes x cell_type (средний профиль) ----
+cell_type_levels <- sort(unique(meta$cell_type))
+ref_ct <- sapply(cell_type_levels, function(ct) {
+  cells <- meta$cell_barcode[meta$cell_type == ct]
+  Matrix::rowMeans(expr[, cells, drop = FALSE])
+})
+```
+
+
+```{r}
+# ---- 5) genes x (sample_id__cell_type) псевдобалк ----
+meta$sample_ct <- paste(meta$orig.ident, meta$cell_type, sep = "__")
+sample_ct_levels <- sort(unique(meta$sample_ct))
+ref_sample_ct <- sapply(sample_ct_levels, function(sc) {
+  cells <- meta$cell_barcode[meta$sample_ct == sc]
+  Matrix::rowMeans(expr[, cells, drop = FALSE])
+})
+```
+
+
+```{r}
+# ---- 6) QC таблица по покрытию ----
+coverage <- meta %>%
+  count(orig.ident, cell_type, name = "n_cells") %>%
+  arrange(desc(n_cells))
+# ---- 7) сохранить ----
+out_dir <- "bulk_ref/"
+dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+write.csv(as.data.frame(ref_ct),
+          file.path(out_dir, "reference_celltype_mean.csv"),
+          quote = FALSE)
+write.csv(as.data.frame(ref_sample_ct),
+          file.path(out_dir, "reference_sample_celltype.csv"),
+          quote = FALSE)
+write.csv(coverage,
+          file.path(out_dir, "reference_cell_coverage.csv"),
+          row.names = FALSE)
+# метаданные клеток (по желанию)
+write.csv(meta,
+          file.path(out_dir, "reference_cell_metadata.csv"),
+          row.names = FALSE)
+message("Saved reference to: ", out_dir)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

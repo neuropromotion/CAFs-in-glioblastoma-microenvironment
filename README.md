@@ -1,12 +1,12 @@
 # CAFs in the Glioblastoma Microenvironment
 
-This repository contains code for an end-to-end **single-cell RNA-seq analysis** of **cancer-associated fibroblasts (CAFs)** and other stromal cell populations within the **glioblastoma (GBM) tumor microenvironment**.  
-The workflow highlights the **multifaceted role of stromal cells** in GBM, including:
+Overview
 
-- Support of **glioblastoma stem cell (GSC)** proliferation  
-- **Pro-angiogenic** remodeling and vascular niche maintenance  
-- **Regional immunosuppression** and immune evasion  
-- Crosstalk between CAFs, tumor cells, endothelial cells, and infiltrating immune cells
+This repository contains code for an integrated analysis of single-cell and bulk RNA-seq data aimed at characterizing cancer-associated fibroblasts (CAFs) in the glioblastoma (GBM) tumor microenvironment.
+
+Glioblastoma is the most aggressive primary brain tumor in adults, characterized by profound remodeling of its tumor microenvironment. However, the existence, origin, and functional relevance of CAFs in glioblastoma remain incompletely understood.
+
+In this study, we analyze 54 single-cell RNA-seq datasets and 88 bulk RNA-seq samples, integrating independent discovery and validation cohorts to systematically characterize CAFs in GBM. Our analysis identifies a reproducible transcriptional continuum linking endothelial cells, pericytes, and CAFs, and defines a robust cross-cohort CAF gene signature. We further investigate CAF-associated cell–cell communication programs and quantify CAF abundance in bulk tumors using both signature-based scoring and deconvolution approaches.
 
 ---
 
@@ -14,51 +14,17 @@ The workflow highlights the **multifaceted role of stromal cells** in GBM, inclu
 
 | File | Description |
 |------|-------------|
-| `main_branch.R` | Processing workflow for the main dataset |
-| `Validation_1.R` | Processing workflow for validation dataset #1 |
-| `Validation_2.R` | Processing workflow for validation dataset #2 |
-| `GSVA.R` | **GSVA-based subtype annotation** of glioblastoma tumor cells. Requires `GBM_subtypes_DEG.xlsx` |
-| `GBM_subtypes_DEG.xlsx` | DEG signatures for glioblastoma transcriptional subtypes (PMIDs: 31327527, 40191211) |
-| `cellchat.R` | **CellChat** pipeline for ligand–receptor interaction inference. Uses configuration in `cellchat_configue/` |
-| `DEG.R` | Differential expression analysis (cluster-wise or group-wise) |
-| `save_plots.R` | Script for figure post-processing and export |
+| `load_data.R` | Data loading and processing workflow for the discovery and validation datasets |
+| `functions.R` | auxillary functions |
+| `cellchat.R` | **CellChat** pipeline for ligand–receptor interaction inference |
+| `GAM.R` | Processing workflow for generative additive models implementation |
+| `ESCAPE.R` | Workflow for functional enrichment analysis |
+| `Diffusion_maps.R` | Workflow for diffusion maps and time trajectory analysis |
+| `CNA.R` | InferCNA - copy number alteration inferring framework |
+| `for_deconvolution.Rmd` | Script for data preparation for bulk-deconvolution analysis |
 
 ---
 
-## Analysis Pipeline Overview
-
-### 1. **Ambient RNA Correction**
-- **DecontX** — applied to the main dataset and validation dataset #1  
-- **SoupX** — applied to validation dataset #2  
-
-### 2. **Doublet Detection**
-- Performed using **DoubletFinder**
-
-### 3. **Batch Integration**
-- **Harmony** used for removing batch effects (main dataset)
-
-### 4. **Core scRNA-seq Workflow**
-- Normalization  
-- Scaling  
-- PCA  
-- UMAP projection  
-- Clustering using the **Louvain algorithm**
-
-### 5. **Tumor Cell Subtype Annotation**
-- **GSVA** used to classify GBM tumor cells into six transcriptional states:  
-  - **Glioblastoma Stem Cells**  
-  - **MES1-like**, **MES2-like**  
-  - **NPC1-like**, **NPC2-like**  
-  - **AC-like**  
-  - **OPC-like**
-
-### 6. **Cell–Cell Communication Analysis**
-- Conducted using **CellChat**, focusing on:
-  - CAF–tumor signaling
-  - CAF–endothelium interactions
-  - CAF-immune interactions 
-  - stromal-tumor interactions
-  - stromal-immune interactions
 
 ---
 

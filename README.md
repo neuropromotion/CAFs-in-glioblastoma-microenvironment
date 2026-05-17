@@ -22,6 +22,8 @@ In this study, we analyze 54 single-cell RNA-seq datasets and 88 bulk RNA-seq sa
 | `Diffusion_maps.R` | Workflow for diffusion maps and time trajectory analysis |
 | `CNA.R` | InferCNA - copy number alteration inferring framework |
 | `for_deconvolution.Rmd` | Script for data preparation for bulk-deconvolution analysis |
+| `gse190504_CAF_rank_score.py` | Python script for CAF signature rank expression evaluation across bulk gse190504 data conditions |
+| `gse190504_cellanneal_deconvolution.py` | Python script for cellanneal bulk-deconvolution analysis within bulk gse190504 data |
 
 ---
 

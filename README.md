@@ -32,6 +32,6 @@ In this study, we analyze 54 single-cell RNA-seq datasets and 88 bulk RNA-seq sa
 
 ## Contact
 Work email: amismailov@hse.ru
-Personal email: neuro.promotion@gmail.com 
+Personal email: ismailov.aly@gmail.com
 
 ---

@@ -34,6 +34,8 @@ https://www.kaggle.com/datasets/ismailovaly/caf-in-glioblastoma
 | `for_deconvolution.Rmd` | Script for data preparation for bulk-deconvolution analysis |
 | `gse190504_CAF_rank_score.py` | Python script for CAF signature rank expression evaluation across bulk gse190504 data conditions |
 | `gse190504_cellanneal_deconvolution.py` | Python script for cellanneal bulk-deconvolution analysis within bulk gse190504 data |
+| `/3D` | 3 dimentional (DC1-DC3) diffusion map representation of CAF-EC-PERICYTE continuum with gene expression |
+| `/cellchat_config` | configuration for cellchat run |
 
 ---
 

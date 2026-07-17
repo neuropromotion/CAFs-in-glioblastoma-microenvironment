@@ -1,4 +1,4 @@
-<img width="484" height="14" alt="image" src="https://github.com/user-attachments/assets/c5fd097b-4e55-492a-b826-0814e84bd055" /># CAFs in the Glioblastoma Microenvironment
+# CAFs in the Glioblastoma Microenvironment
 
 Overview
 

@@ -1,6 +1,6 @@
 ```{r} 
-main <- readRDS(file = "/mnt/jack-5/amismailov/CAF_study/GCF/decontex.rds")
-validation <- readRDS(file = "/mnt/jack-5/amismailov/CAF_study/new_VAL1/combined_ss2_w2_10x_VAL1.rds") 
+main <- readRDS(file = "PATH_TO_MAIN_DATASET.rds")
+validation <- readRDS(file = "PATH_TO_VAL_DATASET.rds") 
 ```
 
 

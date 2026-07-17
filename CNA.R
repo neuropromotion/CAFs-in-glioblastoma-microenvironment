@@ -3,11 +3,10 @@ library(readr)
 library(dplyr)
 library(MASS)
 library(dplyr)
-source('GBM-CARE-WT_CNA_utils.R')
+source('GBM-CARE-WT_CNA_utils.R') # from https://github.com/dravishays/GBM-CARE-WT
 
-get_cna_matrix <- function(seu, mapping_path='/home/amismailov/GBM_finder/genes_chr_mapping.csv'){
+get_cna_matrix <- function(seu, mapping_path='PATH_TO_CHROMOSOME_MAPPING.csv'){ # I extracted mapping from ensemble GTF file
   expr <- GetAssayData(seu, layer = "data")
-  
   mapping <- read_csv(mapping_path)
   mapping <- mapping %>%
     filter(Chromosome %in% c(as.character(1:22), "X"))
@@ -66,7 +65,6 @@ final_prediction <- function(seu, cna_smooth, reference_cells, mapping_path='/ho
     filter(Chromosome %in% c(as.character(1:22), "X"))
   
   # 1. Группируем гены по хромосомам (используем твой mapping)
-  # Убедись, что имена генов в cna_smooth и mapping совпадают (мы убирали суффикс |CHR ранее)
   genes_by_chr <- split(mapping$Gene_name, mapping$Chromosome)
   
   # 2. Считаем средний сигнал для каждой хромосомы в каждой клетке

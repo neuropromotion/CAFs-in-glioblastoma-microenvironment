@@ -9,8 +9,8 @@ Glioblastoma is the most aggressive primary brain tumor in adults, characterized
 In this study, we analyze 54 single-cell RNA-seq datasets and 88 bulk RNA-seq samples, integrating independent discovery and validation cohorts to systematically characterize CAFs in GBM. Our analysis identifies a reproducible transcriptional continuum linking endothelial cells, pericytes, and CAFs, and defines a robust cross-cohort CAF gene signature. We further investigate CAF-associated cell–cell communication programs and quantify CAF abundance in bulk tumors using both signature-based scoring and deconvolution approaches.
 
 ---
-## Original scRNA-seq dataset: discovery - [GSE173278]; validation - GSM3828672 + GSE103224 + GSE135045 + 10x Genomics GBM 3' v3 
-## https://www.kaggle.com/datasets/ismailovaly/caf-in-glioblastoma
+Original scRNA-seq dataset: discovery - [GSE173278]; validation - GSM3828672 + GSE103224 + GSE135045 + 10x Genomics GBM 3' v3 
+Processed and annotated datasets (.rds) along with paper figures in vector (.svg) format stored at Kaggle: https://www.kaggle.com/datasets/ismailovaly/caf-in-glioblastoma
 ---
 ## Repository Structure
 

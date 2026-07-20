@@ -13,11 +13,12 @@ discovery - GSE173278;
 validation - GSM3828672 + GSE103224 + GSE135045 + 10x Genomics GBM 3' v3 
 
 
-
-
-
 Processed and annotated datasets (.rds) along with paper figures in vector (.svg) format stored at Kaggle: 
 https://www.kaggle.com/datasets/ismailovaly/caf-in-glioblastoma
+
+
+
+Paper link: https://www.biorxiv.org/content/10.64898/2026.07.02.736148v1
 
 ---
 ## Repository Structure

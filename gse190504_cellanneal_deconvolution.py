@@ -24,7 +24,7 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PROP = OUT_DIR / "GSE190504_glio_cellanneal_proportions.csv"
 OUT_STATS = OUT_DIR / "GSE190504_glio_cellanneal_stats.txt"
 
-CELLANNEAL_REPO = ROOT.parent / "cellanneal_repo"
+CELLANNEAL_REPO = ROOT / "cellanneal_repo"
 sys.path.insert(0, str(CELLANNEAL_REPO))
  
 from scipy.optimize import dual_annealing as _scipy_dual_annealing  

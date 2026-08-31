@@ -1,27 +1,3 @@
-#!/usr/bin/env python3
-"""
-GSE190504 — rank-based hCAF score (Python port of gse190504_hCAF_within_full.R).
-
-Reproduces the full pipeline from raw inputs:
-    * GSE190504_Processed_Data_Spreadsheet_Glioma_Study.xlsx (expression matrix)
-    * GSE190504_series_matrix.txt                            (sample metadata)
-    * hCAF.txt                                               (CAF gene signature)
-
-Produces (in within_full_hCAF/):
-    * GSE190504_hCAF_scores_metadata.csv      per-sample rank/z scores + metadata
-    * GSE190504_hCAF_longitudinal_pairs.csv   TP1/TP2 paired table
-    * GSE190504_hCAF_test_table.csv           KW / Wilcoxon p-values (with BH)
-    * GSE190504_hCAF_within_stats.txt         human-readable summary
-
-For each sample the score is the mean within-sample percentile rank of hCAF
-genes (rank/N over all measured genes). This is robust to scale/normalisation
-differences and is what the article tables use. We also report a complementary
-z-score: mean of per-gene standardised log2(expr+1) across the hCAF set.
-
-Run:
-    python3 gse190504_hCAF_rank_score.py
-"""
-
 from __future__ import annotations
 
 import io
@@ -55,8 +31,8 @@ def bh_adjust(pvals) -> np.ndarray:
 # ---------------------------------------------------------------------------
 # paths
 # ---------------------------------------------------------------------------
-BASE = Path("/Users/neuropromotion/Desktop/CAF/BULK/final/GSE190504")
-ROOT = BASE.parent
+ROOT = Path(__file__).resolve().parent
+BASE = ROOT / "GSE190504"
 
 EXPR_XLSX = BASE / "GSE190504_Processed_Data_Spreadsheet_Glioma_Study.xlsx"
 META_TXT = BASE / "GSE190504_series_matrix.txt"

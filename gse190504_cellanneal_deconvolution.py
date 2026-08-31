@@ -1,33 +1,3 @@
-#!/usr/bin/env python3
-"""
-GSE190504 — cellanneal deconvolution of the Glio (GBM) subset.
-
-Reproduces glio_deconv_bulkref_cellanneal/GSE190504_glio_cellanneal_proportions.csv
-and the matching statistics file from raw inputs:
-    * GSE190504_Processed_Data_Spreadsheet_Glioma_Study.xlsx (expression)
-    * GSE190504_series_matrix.txt                            (sample metadata)
-    * ../bulk_ref/reference_celltype_mean.csv                (scRNA reference,
-        Seurat AverageExpression(slot="data") aggregated to broad cell states)
-
-Pipeline:
-    1. Load the processed expression spreadsheet (linear, CPM-like).
-    2. Filter samples to histology == "Glio".
-    3. Load the gene x celltype reference, harmonise symbols / drop duplicates.
-    4. Intersect bulk and reference on a common gene set and drop genes that
-       are zero in either bulk or reference.
-    5. Column-normalise (composition) both matrices to make them directly
-       comparable in scale — cellanneal expects relative-abundance-like inputs.
-    6. Run cellanneal (dual annealing on KL divergence).
-    7. Save per-sample proportions joined with metadata (IDH1, treatment).
-    8. Mann-Whitney U on CAFs by IDH1 status and by treatment.
-
-The cellanneal package is loaded from the locally cloned repo:
-    /Users/neuropromotion/Desktop/CAF/BULK/cellanneal_repo
-
-Run:
-    python3 gse190504_cellanneal_deconvolution.py
-"""
-
 from __future__ import annotations
 
 import re
@@ -40,11 +10,9 @@ import numpy as np
 import pandas as pd
 from scipy.stats import mannwhitneyu, spearmanr, pearsonr
 
-
 # ---------------------------------------------------------------------------
-# paths
-# ---------------------------------------------------------------------------
-ROOT = Path("/Users/neuropromotion/Desktop/CAF/BULK/final")
+# paths  
+ROOT = Path(__file__).resolve().parent
 BASE = ROOT / "GSE190504"
 
 EXPR_XLSX = BASE / "GSE190504_Processed_Data_Spreadsheet_Glioma_Study.xlsx"
@@ -56,25 +24,21 @@ OUT_DIR.mkdir(parents=True, exist_ok=True)
 OUT_PROP = OUT_DIR / "GSE190504_glio_cellanneal_proportions.csv"
 OUT_STATS = OUT_DIR / "GSE190504_glio_cellanneal_stats.txt"
 
-CELLANNEAL_REPO = Path("/Users/neuropromotion/Desktop/CAF/BULK/cellanneal_repo")
+CELLANNEAL_REPO = ROOT.parent / "cellanneal_repo"
 sys.path.insert(0, str(CELLANNEAL_REPO))
-
-# The bundled cellanneal/dual_annealing.py was forked from an old SciPy revision
-# and fails on NumPy>=1.25 with "setting an array element with a sequence".
-# Replace it with the modern scipy.optimize.dual_annealing implementation.
-from scipy.optimize import dual_annealing as _scipy_dual_annealing  # noqa: E402
-from cellanneal import general as _ca_general  # noqa: E402
+ 
+from scipy.optimize import dual_annealing as _scipy_dual_annealing  
+from cellanneal import general as _ca_general   
 _ca_general.dual_annealing = _scipy_dual_annealing
 
-from cellanneal.pipelines import run_cellanneal  # noqa: E402
+from cellanneal.pipelines import run_cellanneal  
 
 
-# cellanneal hyper-parameters (kept identical to the rest of the project)
+# cellanneal hyper-parameter
 DISP_MIN = 0.5
 BULK_MIN = 1e-8
 BULK_MAX = 1.0
 MAXITER = 500
-
 
 # ---------------------------------------------------------------------------
 # self-contained XLSX reader (avoids the openpyxl dependency)
